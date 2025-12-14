@@ -1,7 +1,5 @@
 package com.codewithmosh.store.controllers;
 
-
-import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +15,5 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/home")
-    public String home(Model model) {
-        model.addAttribute("name", "Harsh");
-        return "home";
-    }
 
 }
