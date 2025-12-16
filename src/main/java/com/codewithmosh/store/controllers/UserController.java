@@ -19,7 +19,7 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> getAllUsers(@RequestParam(required = false, defaultValue = "") String sort) {
-        // Here we are mapping the user to the user dto and naming convention we use the pascal naming convention
+
         return  userRepository.findAll(Sort.by(sort)).stream().map(userMapper::toDto).toList();
     }
 
@@ -32,5 +32,7 @@ public class UserController {
 
         return ResponseEntity.ok(userMapper.toDto(user));
     }
+
+
 
 }
