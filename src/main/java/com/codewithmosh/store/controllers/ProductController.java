@@ -31,4 +31,6 @@ public class ProductController {
     public List<ProductDto> getProductById(@PathVariable Byte categoryId) {
         return productRepository.findByCategoryId(categoryId).stream().map(productMapper::toDto).toList();
     }
+
+
 }
