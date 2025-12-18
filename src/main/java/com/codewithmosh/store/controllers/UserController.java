@@ -6,13 +6,17 @@ import com.codewithmosh.store.dtos.UserDto;
 import com.codewithmosh.store.dtos.UserRequest;
 import com.codewithmosh.store.mappers.UserMapper;
 import com.codewithmosh.store.repositories.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -39,7 +43,7 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody RegisterUserRequest registerUserRequest, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody RegisterUserRequest registerUserRequest, UriComponentsBuilder uriComponentsBuilder) {
         var user =  userMapper.toEntity(registerUserRequest);
 
         userRepository.save(user);
