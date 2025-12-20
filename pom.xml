@@ -72,7 +72,7 @@
         <dependency>
             <artifactId>lombok</artifactId>
             <groupId>org.projectlombok</groupId>
-            <scope>annotationProcessor</scope>
+
         </dependency>
 
 <!--JSTL-->
@@ -116,7 +116,7 @@
                 <configuration>
                     <url>jdbc:mysql://localhost:3306/store_api?createDatabaseIfNotExist=true</url>
                     <user>root</user>
-                    <password>MyPassword!</password>
+                    <password>harsh</password>
                     <cleanDisabled>false</cleanDisabled>
                 </configuration>
             </plugin>

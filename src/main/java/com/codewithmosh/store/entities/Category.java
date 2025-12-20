@@ -23,7 +23,7 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private Set<Product> products = new HashSet<>();
+    private Set<com.codewithmosh.store.entities.Product> products = new HashSet<>();
 
     public Category(String name) {
         this.name = name;
