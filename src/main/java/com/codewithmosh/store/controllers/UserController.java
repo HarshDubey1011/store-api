@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserController {
     private final UserRepository userRepository;
     private  final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<UserDto> getAllUsers(@RequestParam(required = false, name = "sort") String sort) {
@@ -42,7 +44,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody RegisterUserRequest registerUserRequest, UriComponentsBuilder uriComponentsBuilder) {
         var user =  userMapper.toEntity(registerUserRequest);
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         var uri =  uriComponentsBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(userMapper.toDto(user));
