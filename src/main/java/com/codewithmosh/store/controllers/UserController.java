@@ -4,6 +4,7 @@ import com.codewithmosh.store.dtos.ChangePasswordReqeust;
 import com.codewithmosh.store.dtos.RegisterUserRequest;
 import com.codewithmosh.store.dtos.UserDto;
 import com.codewithmosh.store.dtos.UserRequest;
+import com.codewithmosh.store.entities.LoginUserRequest;
 import com.codewithmosh.store.mappers.UserMapper;
 import com.codewithmosh.store.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -41,6 +43,7 @@ public class UserController {
     }
 
 
+    // Register User
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody RegisterUserRequest registerUserRequest, UriComponentsBuilder uriComponentsBuilder) {
         var user =  userMapper.toEntity(registerUserRequest);
