@@ -1,6 +1,8 @@
 package com.codewithmosh.store.services;
 
 import com.codewithmosh.store.config.JwtConfig;
+import com.codewithmosh.store.entities.Role;
+import com.codewithmosh.store.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,19 +16,20 @@ import java.util.Date;
 public class JwtService {
     private final JwtConfig jwtConfig;
 
-    public String generateAccessToken(Long id, String name, String email) {
-        return generateToken(id, name, email, jwtConfig.getAccessTokenExpiration());
+    public String generateAccessToken(User user) {
+        return generateToken(user, jwtConfig.getAccessTokenExpiration());
     }
 
-    public String generateRefreshToken(Long id, String name, String email) {
-        return generateToken(id, name, email, jwtConfig.getRefreshTokenExpiration());
+    public String generateRefreshToken(User user) {
+        return generateToken(user, jwtConfig.getRefreshTokenExpiration());
     }
 
-    private String generateToken(Long id, String name, String email, long tokenExpiration) {
+    private String generateToken(User user, long tokenExpiration) {
         return Jwts.builder()
-                .subject(id.toString())
-                .claim("name", name)
-                .claim("email", email)
+                .subject(user.getId().toString())
+                .claim("name", user.getName())
+                .claim("email", user.getEmail())
+                .claim("role", user.getRole())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
                 .signWith(jwtConfig.getSecretKey())
@@ -53,5 +56,9 @@ public class JwtService {
 
     public String getUserIdFromToken(String token) {
         return getClaims(token).getSubject();
+    }
+
+    public Role getRoleFromToken(String token) {
+        return Role.valueOf(getClaims(token).get("role", String.class));
     }
 }

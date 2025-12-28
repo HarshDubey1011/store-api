@@ -40,8 +40,8 @@ public class AuthController  {
 
        var user = userRepository.findByEmail(loginUserRequest.getEmail());
 
-        var accessToken = jwtService.generateAccessToken(user.getId(),user.getName(),loginUserRequest.getEmail());
-        var refreshToken = jwtService.generateRefreshToken(user.getId(),user.getName(),loginUserRequest.getEmail());
+        var accessToken = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
 
         var cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true); // cannot accessible by the javascript
@@ -63,7 +63,7 @@ public class AuthController  {
 
         var userId = jwtService.getUserIdFromToken(refreshToken);
         var user = userRepository.findById(Long.valueOf(userId)).orElseThrow();
-        var accessToken = jwtService.generateAccessToken(user.getId(),user.getName(),user.getEmail());
+        var accessToken = jwtService.generateAccessToken(user);
 
         return ResponseEntity.ok(new JwtResponse(accessToken));
     }
