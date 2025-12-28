@@ -1,26 +1,35 @@
 package com.codewithmosh.store.services;
 
+import com.codewithmosh.store.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
+@AllArgsConstructor
 public class JwtService {
-    @Value("${spring.jwt.secret}")
-    private String secret;
+    private final JwtConfig jwtConfig;
 
-    public String generateToken(String email) {
-        final long tokenExpiration = 86400;
+    public String generateAccessToken(Long id, String name, String email) {
+        return generateToken(id, name, email, jwtConfig.getAccessTokenExpiration());
+    }
+
+    public String generateRefreshToken(Long id, String name, String email) {
+        return generateToken(id, name, email, jwtConfig.getRefreshTokenExpiration());
+    }
+
+    private String generateToken(Long id, String name, String email, long tokenExpiration) {
         return Jwts.builder()
-                .subject(email)
+                .subject(id.toString())
+                .claim("name", name)
+                .claim("email", email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .signWith(jwtConfig.getSecretKey())
                 .compact();
     }
 
@@ -35,14 +44,14 @@ public class JwtService {
 
     private Claims getClaims(String token) {
         return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .verifyWith(jwtConfig.getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
 
     }
 
-    public String getEmailFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         return getClaims(token).getSubject();
     }
 }
