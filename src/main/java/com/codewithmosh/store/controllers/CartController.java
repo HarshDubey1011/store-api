@@ -1,12 +1,8 @@
 package com.codewithmosh.store.controllers;
 
-import com.codewithmosh.store.dtos.AddItemToCartRequest;
-import com.codewithmosh.store.dtos.CartDto;
-import com.codewithmosh.store.dtos.CartItemDto;
-import com.codewithmosh.store.dtos.UpdateCartItemRequest;
+import com.codewithmosh.store.dtos.*;
 import com.codewithmosh.store.exceptions.CartNotFoundException;
 import com.codewithmosh.store.exceptions.ProductNotFoundException;
-import com.codewithmosh.store.mappers.CartMapper;
 import com.codewithmosh.store.services.CartService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -15,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -65,13 +60,18 @@ public class CartController {
 
     // Exceptions
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handleCartNotFound() {
-        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error","Cart Not Found!"));
+    public ResponseEntity<ErrorDto> handleCartNotFound() {
+
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ErrorDto("Cart Not Found")
+        );
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handleProductNotFound() {
-        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Product Not Found!"));
+    public ResponseEntity<ErrorDto> handleProductNotFound() {
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorDto("Product Not Found")
+        );
     }
 
 }
